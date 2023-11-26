@@ -4,6 +4,7 @@ import com.cg.exception.DataInputException;
 import com.cg.model.Product;
 import com.cg.model.ProductAvatar;
 import com.cg.model.dto.product.ProductCreateReqDTO;
+import com.cg.model.dto.product.ProductResDTO;
 import com.cg.repository.ProductAvatarRepository;
 import com.cg.repository.ProductRepository;
 import com.cg.service.uploadImage.UploadService;
@@ -43,6 +44,11 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public Optional<Product> findById(Long id) {
         return Optional.empty();
+    }
+
+    @Override
+    public List<ProductResDTO> getAllProductResDTO() {
+        return productRepository.getAllProductResDTO();
     }
 
     @Override

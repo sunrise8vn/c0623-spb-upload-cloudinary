@@ -40,7 +40,7 @@ public class AppUtils {
 
         if (principal instanceof UserDetails) {
             userName = ((UserDetails) principal).getUsername();
-            userName = userName.substring(0, userName.indexOf("@"));
+//            userName = userName.substring(0, userName.indexOf("@"));
         } else {
             userName = principal.toString();
         }

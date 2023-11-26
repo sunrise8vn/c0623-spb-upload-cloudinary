@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Shopping</title>
+    <th:block th:replace="layout/head" />
+</head>
+
+<body>
+    <div class="container-fluid">
+        <header>
+            <nav class="navbar bg-body-tertiary">
+                <div class="container-fluid">
+                    <a class="navbar-brand">Shopping</a>
+                    <div class="d-flex" style="gap: 10px;">
+                        <button class="btn btn-outline-light" type="button">
+                            <th:block th:text="${username}" />
+                        </button>
+    <!--                    <button class="btn btn-outline-light" type="button">-->
+    <!--                        <i class="fas fa-history"></i>-->
+    <!--                        Transfer histories-->
+    <!--                    </button>-->
+    <!--                    <button type="button" class="btn btn-outline-light" data-bs-toggle="modal"-->
+    <!--                            data-bs-target="#modalCreate">-->
+    <!--                        <i class="far fa-plus-square"></i>-->
+    <!--                        Add new customer-->
+    <!--                    </button>-->
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="content">
+            <div class="cards">
+                <div class="card" style="width: 18rem;">
+                    <img src="..." class="card-img-top col-lg-3" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <img src="..." class="card-img-top col-lg-3" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <img src="..." class="card-img-top col-lg-3" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <img src="..." class="card-img-top col-lg-3" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <img src="..." class="card-img-top col-lg-3" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <img src="..." class="card-img-top col-lg-3" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <img src="..." class="card-img-top col-lg-3" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+
+        </footer>
+    </div>
+
+    <div id="loading" class="sk-chase hide">
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+    </div>
+
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive"
+             aria-atomic="true">
+            <div class="d-flex">
+                <div id="toast-body" class="toast-body">
+                </div>
+                <button type="button" id="btnCloseToast" class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const page = {
+            url: {
+                getAllProducts: AppUtils.BASE_PRODUCT_API,
+            },
+            elements: {},
+            loadData: {},
+            commands: {}
+        }
+
+        page.elements.footer = $('footer')
+
+        page.elements.loading = $('#loading');
+
+        page.elements.toastLive = $('#liveToast')
+        page.elements.toastBody = $('#toast-body')
+        page.elements.btnCloseToast = $('#btnCloseToast')
+
+
+        page.loadData.getAllProducts = async () => {
+            $.ajax({
+                url: page.url.getAllProducts
+            })
+                .done((data) => {
+                    $('.content .cards').empty();
+
+                    $.each(data, (index, item) => {
+                        const str = page.commands.renderProduct(item);
+
+                        $('.content .cards').append(str);
+                    })
+                })
+        }
+
+        page.commands.renderProduct = (obj) => {
+            const avatar = AppUtils.BASE_CLOUDINARY_URL + '/'
+                + AppUtils.BASE_SCALE_280_200_85 + '/'
+                + obj.avatar.fileFolder + '/'
+                + obj.avatar.fileName;
+            return `
+                <div class="card" style="width: 18rem;">
+                    <img src="${avatar}" class="card-img-top col-lg-3" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">${obj.title}</h5>
+                        <h5 class="card-price">${obj.price}</h5>
+                        <button class="btn btn-outline-primary">Add to card</button>
+                    </div>
+                </div>
+            `
+        }
+
+        page.commands.renderFooter = () => {
+            return `
+                <button class="btn btn-secondary edit">
+                    <i class="far fa-edit"></i>
+                    Update
+                </button>
+                <button class="btn btn-success deposit">
+                    <i class="fas fa-plus"></i>
+                    Deposit
+                </button>
+                <button class="btn btn-warning">
+                    <i class="fas fa-minus"></i>
+                    Withdraw
+                </button>
+                <button class="btn btn-primary transfer">
+                    <i class="fas fa-exchange-alt"></i>
+                    Transfer
+                </button>
+                <button class="btn btn-danger">
+                    <i class="fas fa-ban"></i>
+                    Inactive
+                </button>
+            `
+        }
+
+
+        $.ajaxSetup({
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+
+
+        $(() => {
+            page.loadData.getAllProducts();
+        })
+
+    </script>
+</body>
+
+</html>
